@@ -3,24 +3,313 @@
 #include <string.h>
 #define TAM 10
 
-int main() {
+typedef struct{
+    char nome[20], cidade[20], pais[20];
+    int avaliacoes, vagas, area_lazer, piscina, estacionamento;
+    float media, preco;
+} Hotel;
 
-    char nome[TAM][20], cidade[TAM][20], pais[TAM][20], auxchar[20], inic[20] = {'x'};
-    int avaliacoes[TAM], vagas[TAM], area_lazer[TAM], piscina[TAM], estacionamento[TAM], auxint, escolha = 0, i, j, posicao;
-    float media[TAM], preco[TAM], auxfloat;
+void cadastrarHotel(Hotel h_f[]){
+    char inic[20] = {'x'};
+
+    for(int i = 0; i < TAM; i++){
+        strcpy(h_f[i].nome, inic);
+        strcpy(h_f[i].cidade, inic);
+        strcpy(h_f[i].pais, inic);
+        h_f[i].avaliacoes = -1;
+        h_f[i].vagas = -1;
+        h_f[i].area_lazer = -1;
+        h_f[i].piscina = -1;
+        h_f[i].estacionamento = -1;
+        h_f[i].media = -1.0;
+        h_f[i].preco = -1.0;
+    }
+
+    for(int i = 0; i < TAM; i++){
+        if(strcmp(h_f[i].nome, "x") == 0){
+            fflush(stdin);
+            printf("Digite o nome do hotel: ");
+            gets(h_f[i].nome);
+            fflush(stdin);
+            printf("Digite a cidade do hotel: ");
+            gets(h_f[i].cidade);
+            fflush(stdin);
+            printf("Digite o pais do hotel: ");
+            gets(h_f[i].pais);
+            fflush(stdin);
+            printf("Digite a media de avaliacoes do hotel: ");
+            scanf("%f", &h_f[i].media);
+            printf("Digite o numero de avaliacoes do hotel: ");
+            scanf("%d", &h_f[i].avaliacoes);
+            printf("Digite o preco do hotel: ");
+            scanf("%f", &h_f[i].preco);
+            printf("Digite o numero de vagas: ");
+            scanf("%d", &h_f[i].vagas);
+            printf("Digite 0 se nao tem area de lazer e 1 se tiver: ");
+            scanf("%d", &h_f[i].area_lazer);
+            printf("Digite 0 se nao tem piscina e 1 se tiver: ");
+            scanf("%d", &h_f[i].piscina);
+            printf("Digite 0 se nao tem estacionamento e 1 se tiver: ");
+            scanf("%d", &h_f[i].estacionamento);
+            fflush(stdin);
+            system("cls");
+            break;
+        }
+    }
+}
+
+void classificarPreco(Hotel h_f[]){
+    char auxchar[20];
+    int auxint, i, j;
+    float auxfloat;
+
+    printf("\nHoteis: (preco)\n");
+    //Classificacao por preco
+    for(i = 0; i < TAM; i++){
+        if(strcmp(h_f[i].nome, "x") != 0){
+            for(j = i + 1; j < TAM; j++){
+                if(strcmp(h_f[j].nome, "x") != 0){
+                    if(h_f[i].preco > h_f[j].preco){
+                        //nome
+                        strcpy(auxchar, h_f[j].nome);
+                        strcpy(h_f[j].nome, h_f[i].nome);
+                        strcpy(h_f[i].nome, auxchar);
+
+                        //cidade
+                        strcpy(auxchar, h_f[j].cidade);
+                        strcpy(h_f[j].cidade, h_f[i].cidade);
+                        strcpy(h_f[i].cidade, auxchar);
+
+                        //pais
+                        strcpy(auxchar, h_f[j].pais);
+                        strcpy(h_f[j].pais, h_f[i].pais);
+                        strcpy(h_f[i].pais, auxchar);
+
+                        //avaliacoes
+                        auxint = h_f[j].avaliacoes;
+                        h_f[j].avaliacoes = h_f[i].avaliacoes;
+                        h_f[i].avaliacoes = auxint;
+
+                        //vagas
+                        auxint = h_f[j].vagas;
+                        h_f[j].vagas = h_f[i].vagas;
+                        h_f[i].vagas = auxint;
+
+                        //area_lazer
+                        auxint = h_f[j].area_lazer;
+                        h_f[j].area_lazer = h_f[i].area_lazer;
+                        h_f[i].area_lazer = auxint;
+
+                        //piscina
+                        auxint = h_f[j].piscina;
+                        h_f[j].piscina = h_f[i].piscina;
+                        h_f[i].piscina = auxint;
+
+                        //estacionamento
+                        auxint = h_f[j].estacionamento;
+                        h_f[j].estacionamento = h_f[i].estacionamento;
+                        h_f[i].estacionamento = auxint;
+
+                        //media
+                        auxfloat = h_f[j].media;
+                        h_f[j].media = h_f[i].media;
+                        h_f[i].media = auxfloat;
+
+                        //preco
+                        auxfloat = h_f[j].preco;
+                        h_f[j].preco = h_f[i].preco;
+                        h_f[i].preco = auxfloat;
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\tRANKING\n");
+    for(i = 0; i < TAM; i++){
+        if(strcmp(h_f[i].nome, "x") != 0){
+            printf("HOTEL N-%d\n", i + 1);
+            printf("=================================");
+            printf("\nHotel: %s\n", h_f[i].nome);
+            printf("Cidade: %s\n", h_f[i].cidade);
+            printf("Pais: %s\n", h_f[i].pais);
+            printf("Media de avaliacoes: %.2f\n", h_f[i].media);
+            printf("Numero de avaliacoes do hotel: %d\n", h_f[i].avaliacoes);
+            printf("Preco: R$ %.2f\n", h_f[i].preco);
+            printf("Vagas disponiveis: %d\n", h_f[i].vagas);
+            if(h_f[i].area_lazer == 1){
+                printf("Com area de lazer\n");
+            } else{
+                printf("Sem area de lazer\n");
+            }
+
+            if(h_f[i].piscina == 1){
+                printf("Com piscina\n");
+            } else{
+                printf("Sem piscina\n");
+            }
+
+            if(h_f[i].estacionamento == 1){
+                printf("Com estacionamento\n\n");
+            } else{
+                printf("Sem estacionamento\n");
+            }
+        }
+    }
+    printf("=================================\n");
+    system("pause");
+    system("cls");
+}
+
+void classificarAvaliacao(Hotel h_f[]){
+    char auxchar[20];
+    int auxint, i, j;
+    float auxfloat;
+
+    printf("\nHoteis: (avaliacao)\n");
+    //Classificao por media de avaliacoes
+    for(i = 0; i < TAM; i++){
+        if(strcmp(h_f[i].nome, "x") != 0){
+            for(j = i + 1; j < TAM; j++){
+                if(strcmp(h_f[j].nome, "x") != 0){
+                    if(h_f[i].media > h_f[j].media){
+                        //nome
+                        strcpy(auxchar, h_f[j].nome);
+                        strcpy(h_f[j].nome, h_f[i].nome);
+                        strcpy(h_f[i].nome, auxchar);
+
+                        //cidade
+                        strcpy(auxchar, h_f[j].cidade);
+                        strcpy(h_f[j].cidade, h_f[i].cidade);
+                        strcpy(h_f[i].cidade, auxchar);
+
+                        //pais
+                        strcpy(auxchar, h_f[j].pais);
+                        strcpy(h_f[j].pais, h_f[i].pais);
+                        strcpy(h_f[i].pais, auxchar);
+
+                        //avaliacoes
+                        auxint = h_f[j].avaliacoes;
+                        h_f[j].avaliacoes = h_f[i].avaliacoes;
+                        h_f[i].avaliacoes = auxint;
+
+                        //vagas
+                        auxint = h_f[j].vagas;
+                        h_f[j].vagas = h_f[i].vagas;
+                        h_f[i].vagas = auxint;
+
+                        //area_lazer
+                        auxint = h_f[j].area_lazer;
+                        h_f[j].area_lazer = h_f[i].area_lazer;
+                        h_f[i].area_lazer = auxint;
+
+                        //piscina
+                        auxint = h_f[j].piscina;
+                        h_f[j].piscina = h_f[i].piscina;
+                        h_f[i].piscina = auxint;
+
+                        //estacionamento
+                        auxint = h_f[j].estacionamento;
+                        h_f[j].estacionamento = h_f[i].estacionamento;
+                        h_f[i].estacionamento = auxint;
+
+                        //media
+                        auxfloat = h_f[j].media;
+                        h_f[j].media = h_f[i].media;
+                        h_f[i].media = auxfloat;
+
+                        //preco
+                        auxfloat = h_f[j].preco;
+                        h_f[j].preco = h_f[i].preco;
+                        h_f[i].preco = auxfloat;
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\tRANKING\n");
+    for(i = 0; i < TAM; i++){
+        if(strcmp(h_f[i].nome, "x") != 0){
+            printf("HOTEL N-%d\n", i + 1);
+            printf("=================================");
+            printf("\nHotel: %s\n", h_f[i].nome);
+            printf("Cidade: %s\n", h_f[i].cidade);
+            printf("Pais: %s\n", h_f[i].pais);
+            printf("Media de avaliacoes: %.2f\n", h_f[i].media);
+            printf("Numero de avaliacoes do hotel: %d\n", h_f[i].avaliacoes);
+            printf("Preco: R$ %.2f\n", h_f[i].preco);
+            printf("Vagas disponiveis: %d\n", h_f[i].vagas);
+            if(h_f[i].area_lazer == 1){
+                printf("Com area de lazer\n");
+            } else{
+                printf("Sem area de lazer\n");
+            }
+
+            if(h_f[i].piscina == 1){
+                printf("Com piscina\n");
+            } else{
+                printf("Sem piscina\n");
+            }
+
+            if(h_f[i].estacionamento == 1){
+                printf("Com estacionamento\n\n");
+            } else{
+                printf("Sem estacionamento\n");
+            }
+        }
+    }
+    printf("=================================\n");
+    system("pause");
+    system("cls");
+}
+
+void removerHotel(Hotel h_f[]){
+    char inic[20] = {'x'};
+    int i, j, posicao;
+
+    printf("=================================\n");
 
     for(i = 0; i < TAM; i++){
-        strcpy(nome[i], inic);
-        strcpy(cidade[i], inic);
-        strcpy(pais[i], inic);
-        avaliacoes[i] = -1;
-        vagas[i] = -1;
-        area_lazer[i] = -1;
-        piscina[i] = -1;
-        estacionamento[i] = -1;
-        media[i] = -1.0;
-        preco[i] = -1.0;
+        if(strcmp(h_f[i].nome, "x") != 0){
+            printf("\nN-%d: %s\n", i + 1, h_f[i].nome);
+        }
     }
+    printf("=================================\n");
+
+    printf("Digite o numero do hotel que deseja remover: ");
+    scanf("%d", &posicao);
+
+    for(i = posicao - 1; i < TAM - 1; i++){
+        strcpy(h_f[i].nome, h_f[i + 1].nome);
+        strcpy(h_f[i].cidade, h_f[i + 1].cidade);
+        strcpy(h_f[i].pais, h_f[i + 1].pais);
+        h_f[i].avaliacoes = h_f[i + 1].avaliacoes;
+        h_f[i].media = h_f[i + 1].media;
+        h_f[i].preco = h_f[i + 1].preco;
+        h_f[i].area_lazer = h_f[i + 1].area_lazer;
+        h_f[i].piscina = h_f[i + 1].piscina;
+        h_f[i].estacionamento = h_f[i + 1].estacionamento;
+        h_f[i].vagas = h_f[i + 1].vagas;
+    }
+
+    if(strcmp(h_f[TAM - 1].nome, "x") != 0){
+        strcpy(h_f[TAM - 1].nome, inic);
+        strcpy(h_f[TAM - 1].cidade, inic);
+        strcpy(h_f[TAM - 1].pais, inic);
+        h_f[TAM - 1].avaliacoes = -1;
+        h_f[TAM - 1].media = -1.0;
+        h_f[TAM - 1].preco = -1.0;
+        h_f[TAM - 1].area_lazer = -1;
+        h_f[TAM - 1].piscina = -1;
+        h_f[TAM - 1].estacionamento = -1;
+        h_f[TAM - 1].vagas = -1;
+    }
+}
+
+int main() {
+    Hotel h[TAM];
+    int escolha = 0;
 
     while(0 == 0){
 
@@ -35,264 +324,18 @@ int main() {
 
         switch(escolha){
             case 1:
-                for(i = 0; i < TAM; i++){
-                    if(strcmp(nome[i], "x") == 0){
-                        fflush(stdin);
-                        printf("Digite o nome do hotel: ");
-                        gets(nome[i]);
-                        fflush(stdin);
-                        printf("Digite a cidade do hotel: ");
-                        gets(cidade[i]);
-                        fflush(stdin);
-                        printf("Digite o pais do hotel: ");
-                        gets(pais[i]);
-                        fflush(stdin);
-                        printf("Digite a media de avaliacoes do hotel: ");
-                        scanf("%f", &media[i]);
-                        printf("Digite o numero de avaliacoes do hotel: ");
-                        scanf("%d", &avaliacoes[i]);
-                        printf("Digite o preco do hotel: ");
-                        scanf("%f", &preco[i]);
-                        printf("Digite o numero de vagas: ");
-                        scanf("%d", &vagas[i]);
-                        printf("Digite 0 se nao tem area de lazer e 1 se tiver: ");
-                        scanf("%d", &area_lazer[i]);
-                        printf("Digite 0 se nao tem piscina e 1 se tiver: ");
-                        scanf("%d", &piscina[i]);
-                        printf("Digite 0 se nao tem estacionamento e 1 se tiver: ");
-                        scanf("%d", &estacionamento[i]);
-                        fflush(stdin);
-                        system("cls");
-                        break;
-                    }
-                }
+                cadastrarHotel(h);
                 break;
             case 2:
-            	printf("\nHoteis: (preco)");
-                //Classificacao por preco
-                for(i = 0; i < TAM; i++){
-                    if(strcmp(nome[i], "x") != 0){
-                        for(j = i + 1; j < TAM; j++){
-                            if(strcmp(nome[j], "x") != 0){
-                                if(preco[i] > preco[j]){
-                                    //nome
-                                    strcpy(auxchar, nome[j]);
-                                    strcpy(nome[j], nome[i]);
-                                    strcpy(nome[i], auxchar);
-
-                                    //cidade
-                                    strcpy(auxchar, cidade[j]);
-                                    strcpy(cidade[j], cidade[i]);
-                                    strcpy(cidade[i], auxchar);
-
-                                    //pais
-                                    strcpy(auxchar, pais[j]);
-                                    strcpy(pais[j], pais[i]);
-                                    strcpy(pais[i], auxchar);
-
-                                    //avaliacoes
-                                    auxint = avaliacoes[j];
-                                    avaliacoes[j] = avaliacoes[i];
-                                    avaliacoes[i] = auxint;
-
-                                    //vagas
-                                    auxint = vagas[j];
-                                    vagas[j] = vagas[i];
-                                    vagas[i] = auxint;
-
-                                    //area_lazer
-                                    auxint = area_lazer[j];
-                                    area_lazer[j] = area_lazer[i];
-                                    area_lazer[i] = auxint;
-
-                                    //piscina
-                                    auxint = piscina[j];
-                                    piscina[j] = piscina[i];
-                                    piscina[i] = auxint;
-
-                                    //estacionamento
-                                    auxint = estacionamento[j];
-                                    estacionamento[j] = estacionamento[i];
-                                    estacionamento[i] = auxint;
-
-                                    //media
-                                    auxfloat = media[j];
-                                    media[j] = media[i];
-                                    media[i] = auxfloat;
-
-                                    //preco
-                                    auxfloat = preco[j];
-                                    preco[j] = preco[i];
-                                    preco[i] = auxfloat;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                printf("\tRANKING\n");
-                for(i = 0; i < TAM; i++){
-                        if(strcmp(nome[i], "x") != 0){
-                            printf("HOTEL N-%d\n", i);
-                            printf("=================================");
-                            printf("\nHotel: %s\n", nome[i]);
-                            printf("Cidade: %s\n", cidade[i]);
-                            printf("Pais: %s\n", pais[i]);
-                            printf("Media de avaliacoes: %.2f\n", media[i]);
-                            printf("Numero de avaliacoes do hotel: %d\n", avaliacoes[i]);
-                            printf("Preco: R$ %.2f\n", preco[i]);
-                            printf("Vagas disponiveis: %d\n", vagas[i]);
-                            if(area_lazer[i] == 1){
-                                printf("Com area de lazer\n");
-                            } else{
-                                printf("Sem area de lazer\n");
-                            }
-
-                            if(piscina[i] == 1){
-                                printf("Com piscina\n");
-                            } else{
-                                printf("Sem piscina\n");
-                            }
-
-                            if(estacionamento[i] == 1){
-                                printf("Com estacionamento\n\n");
-                            } else{
-                                printf("Sem estacionamento\n");
-                            }
-                        }
-                  }
-                  printf("=================================\n");
-                  system("pause");
+            	classificarPreco(h);
                 break;
             case 3:
-            	printf("\nHoteis: (avaliacao)\n");
-                //Classificao por media de avaliacoes
-                for(i = 0; i < TAM; i++){
-                    if(strcmp(nome[i], "x") != 0){
-                        for(j = i + 1; j < TAM; j++){
-                            if(strcmp(nome[j], "x") != 0){
-                                if(media[i] > media[j]){
-                                    //nome
-                                    strcpy(auxchar, nome[j]);
-                                    strcpy(nome[j], nome[i]);
-                                    strcpy(nome[i], auxchar);
-
-                                    //cidade
-                                    strcpy(auxchar, cidade[j]);
-                                    strcpy(cidade[j], cidade[i]);
-                                    strcpy(cidade[i], auxchar);
-
-                                    //pais
-                                    strcpy(auxchar, pais[j]);
-                                    strcpy(pais[j], pais[i]);
-                                    strcpy(pais[i], auxchar);
-
-                                    //avaliacoes
-                                    auxint = avaliacoes[j];
-                                    avaliacoes[j] = avaliacoes[i];
-                                    avaliacoes[i] = auxint;
-
-                                    //vagas
-                                    auxint = vagas[j];
-                                    vagas[j] = vagas[i];
-                                    vagas[i] = auxint;
-
-                                    //area_lazer
-                                    auxint = area_lazer[j];
-                                    area_lazer[j] = area_lazer[i];
-                                    area_lazer[i] = auxint;
-
-                                    //piscina
-                                    auxint = piscina[j];
-                                    piscina[j] = piscina[i];
-                                    piscina[i] = auxint;
-
-                                    //estacionamento
-                                    auxint = estacionamento[j];
-                                    estacionamento[j] = estacionamento[i];
-                                    estacionamento[i] = auxint;
-
-                                    //media
-                                    auxfloat = media[j];
-                                    media[j] = media[i];
-                                    media[i] = auxfloat;
-
-                                    //preco
-                                    auxfloat = preco[j];
-                                    preco[j] = preco[i];
-                                    preco[i] = auxfloat;
-                                }
-                            }
-                        }
-                    }
-                }
-
-                printf("\tRANKING\n");
-                for(i = 0; i < TAM; i++){
-                        if(strcmp(nome[i], "x") != 0){
-                            printf("HOTEL N-%d\n", i);
-                            printf("=================================");
-                            printf("\nHotel: %s\n", nome[i]);
-                            printf("Cidade: %s\n", cidade[i]);
-                            printf("Pais: %s\n", pais[i]);
-                            printf("Media de avaliacoes: %.2f\n", media[i]);
-                            printf("Numero de avaliacoes do hotel: %d\n", avaliacoes[i]);
-                            printf("Preco: R$ %.2f\n", preco[i]);
-                            printf("Vagas disponiveis: %d\n", vagas[i]);
-                            if(area_lazer[i] == 1){
-                                printf("Com area de lazer\n");
-                            } else{
-                                printf("Sem area de lazer\n");
-                            }
-
-                            if(piscina[i] == 1){
-                                printf("Com piscina\n");
-                            } else{
-                                printf("Sem piscina\n");
-                            }
-
-                            if(estacionamento[i] == 1){
-                                printf("Com estacionamento\n\n");
-                            } else{
-                                printf("Sem estacionamento\n");
-                            }
-                        }
-                  }
-                  printf("=================================\n");
-                  system("pause");
+            	classificarAvaliacao(h);
                 break;
             case 4:
-                //remover hotel
-                printf("Digite a posicao do hotel que deseja remover: ");
-                scanf("%d", &posicao);
-                for(i = posicao; i < TAM - 1; i++){
-                    strcpy(nome[i], nome[i + 1]);
-                    strcpy(cidade[i], cidade[i + 1]);
-                    strcpy(pais[i], pais[i + 1]);
-                    avaliacoes[i] = avaliacoes[i + 1];
-                    media[i] = media[i + 1];
-                    preco[i] = preco[i + 1];
-                    area_lazer[i] = area_lazer[i + 1];
-                    piscina[i] = piscina[i + 1];
-                    estacionamento[i] = estacionamento[i + 1];
-                    vagas[i] = vagas[i + 1];
-                }
-
-                if(strcmp(nome[TAM - 1], "x") != 0){
-                    strcpy(nome[TAM - 1], inic);
-                    strcpy(cidade[TAM - 1], inic);
-                    strcpy(pais[TAM - 1], inic);
-                    avaliacoes[TAM - 1] = 0;
-                    media[TAM - 1] = 0.0;
-                    preco[TAM - 1] = 0.0;
-                    area_lazer[TAM - 1] = -1;
-                    piscina[TAM - 1] = -1;
-                    estacionamento[TAM - 1] = -1;
-                    vagas[TAM - 1] = 0;
-                }
+                removerHotel(h);
                 break;
             case 5:
-                //sair();
                 return 0;
                 break;
             default:
