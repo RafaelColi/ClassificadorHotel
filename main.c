@@ -10,20 +10,6 @@ typedef struct{
 } Hotel;
 
 void cadastrarHotel(Hotel h_f[]){
-    char inic[20] = {'x'};
-
-    for(int i = 0; i < TAM; i++){
-        strcpy(h_f[i].nome, inic);
-        strcpy(h_f[i].cidade, inic);
-        strcpy(h_f[i].pais, inic);
-        h_f[i].avaliacoes = -1;
-        h_f[i].vagas = -1;
-        h_f[i].area_lazer = -1;
-        h_f[i].piscina = -1;
-        h_f[i].estacionamento = -1;
-        h_f[i].media = -1.0;
-        h_f[i].preco = -1.0;
-    }
 
     for(int i = 0; i < TAM; i++){
         if(strcmp(h_f[i].nome, "x") == 0){
@@ -172,7 +158,7 @@ void classificarAvaliacao(Hotel h_f[]){
         if(strcmp(h_f[i].nome, "x") != 0){
             for(j = i + 1; j < TAM; j++){
                 if(strcmp(h_f[j].nome, "x") != 0){
-                    if(h_f[i].media > h_f[j].media){
+                    if(h_f[i].media < h_f[j].media){
                         //nome
                         strcpy(auxchar, h_f[j].nome);
                         strcpy(h_f[j].nome, h_f[i].nome);
@@ -310,6 +296,20 @@ void removerHotel(Hotel h_f[]){
 int main() {
     Hotel h[TAM];
     int escolha = 0;
+    char inic[20] = {'x'};
+
+    for(int i = 0; i < TAM; i++){
+        strcpy(h[i].nome, inic);
+        strcpy(h[i].cidade, inic);
+        strcpy(h[i].pais, inic);
+        h[i].avaliacoes = -1;
+        h[i].vagas = -1;
+        h[i].area_lazer = -1;
+        h[i].piscina = -1;
+        h[i].estacionamento = -1;
+        h[i].media = -1.0;
+        h[i].preco = -1.0;
+    }
 
     while(0 == 0){
 
